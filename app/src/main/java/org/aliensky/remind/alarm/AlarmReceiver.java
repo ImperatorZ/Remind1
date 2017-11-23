@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import org.aliensky.remind.MainActivity;
@@ -35,17 +37,21 @@ public class AlarmReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, (int) timeStamp,
                 resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle("Reminder");
         builder.setContentText(title);
         builder.setColor(context.getResources().getColor(color));
         builder.setSmallIcon(R.drawable.ic_check_white_48dp);
+        builder.setSound(alarmSound);
 
-        builder.setDefaults(Notification.DEFAULT_ALL);
+        builder.setDefaults(Notification.FLAG_ONLY_ALERT_ONCE);
         builder.setContentIntent(pendingIntent);
 
         Notification notification = builder.build();
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        notification.flags |= Notification.DEFAULT_SOUND;
 
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
